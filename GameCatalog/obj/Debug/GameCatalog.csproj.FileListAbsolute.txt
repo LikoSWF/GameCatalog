@@ -1,0 +1,14 @@
+C:\Users\user_2\source\repos\Lottery\Lottery\bin\Debug\GameCatalog.exe.config
+C:\Users\user_2\source\repos\Lottery\Lottery\bin\Debug\GameCatalog.exe
+C:\Users\user_2\source\repos\Lottery\Lottery\bin\Debug\GameCatalog.pdb
+C:\Users\user_2\source\repos\Lottery\Lottery\obj\Debug\GameCatalog.csprojAssemblyReference.cache
+C:\Users\user_2\source\repos\Lottery\Lottery\obj\Debug\GameCatalog.csproj.CoreCompileInputs.cache
+C:\Users\user_2\source\repos\Lottery\Lottery\obj\Debug\GameCatalog.exe
+C:\Users\user_2\source\repos\Lottery\Lottery\obj\Debug\GameCatalog.pdb
+C:\Users\user_2\source\repos\GameCatalog\GameCatalog\bin\Debug\GameCatalog.exe.config
+C:\Users\user_2\source\repos\GameCatalog\GameCatalog\bin\Debug\GameCatalog.exe
+C:\Users\user_2\source\repos\GameCatalog\GameCatalog\bin\Debug\GameCatalog.pdb
+C:\Users\user_2\source\repos\GameCatalog\GameCatalog\obj\Debug\GameCatalog.csprojAssemblyReference.cache
+C:\Users\user_2\source\repos\GameCatalog\GameCatalog\obj\Debug\GameCatalog.csproj.CoreCompileInputs.cache
+C:\Users\user_2\source\repos\GameCatalog\GameCatalog\obj\Debug\GameCatalog.exe
+C:\Users\user_2\source\repos\GameCatalog\GameCatalog\obj\Debug\GameCatalog.pdb
