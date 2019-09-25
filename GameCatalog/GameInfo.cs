@@ -10,8 +10,9 @@ namespace GameCatalog
     {
         public string Name { get; set;}
         public string Description { get; set; }
-        public float Review { get; set; }
-        public DateTime LastUpdate { get; set; }
+        public string Review { get; set; }
+        public string WhatsNew { get; set; }
+        public string LastUpdate { get; set; }
         public string Size { get; set; }
         public string Installs { get; set; }
         public string Version { get; set; }

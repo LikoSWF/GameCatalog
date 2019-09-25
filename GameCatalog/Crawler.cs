@@ -32,8 +32,10 @@ namespace GameCatalog
                 if (matches.Count > 0)
                 {
                     WebPage page = new WebPage(googlePlay + matches[0].ToString());
-                    this.pages.Add(page);
-                    ParseGameInfo(page);
+                    // this.pages.Add(page);
+                    GameInfo game = ParseGameInfo(page);
+                    this.games.Add(game);
+                    PrintGame(game);
                 }
             }
         }
@@ -42,32 +44,89 @@ namespace GameCatalog
 
 
 
-
-
-
-        private void Parse()
-        {
-            foreach (var page in this.pages)
-            {
-                this.games.Add(ParseGameInfo(page));
-            }
-        }
 
         private GameInfo ParseGameInfo(WebPage page)
         {
             GameInfo info = new GameInfo();
             const string namePattern = @"<h1[^>]*>.*<span[^>]*>([^<]*)<\/span>";
-            Regex name = new Regex(namePattern);
-            for (int i = 0; i < page.HTML.Length; i++)
-            {
-                MatchCollection matches = name.Matches(page.HTML[i]);
-                if (matches.Count > 0)
-                {
-                    Console.WriteLine("NAME: " + matches[0].Groups[1].ToString());
-                }
-            }
+            // const string descriptionPattern = @"name=""description""[^>]*content=""([^""]*)"">"; // use only if on single line
+            const string descriptionStart = @"name=""description""[^>]*content=""(.*)";
+            const string descriptionEnd = @"([^>]*)"">";
+            const string reviewPattern = @"BHMmbe[^>]*>([\d\.]*)<";
+            const string whatsNewPattern = @"New\W.*jsslot>(.*?)<\/span>";
+
+            info.Name = FindString(namePattern, page);
+            info.Description = FindString(descriptionStart, descriptionEnd, page);
+            info.Review = FindString(reviewPattern, page);
+            info.WhatsNew = FindString(whatsNewPattern, page);
             return info;
         }
 
+        private string FindString(string regexPattern, WebPage page)
+        {
+            Regex regex = new Regex(regexPattern);
+            string answer = "";
+            for (int i = 0; i < page.HTML.Length; i++)
+            {
+                MatchCollection matches = regex.Matches(page.HTML[i]);
+                if (matches.Count > 0)
+                {
+                    for (int j = 1; j < matches[0].Length; j++)
+                    {
+                        answer += matches[0].Groups[j].ToString();
+                    }
+                    break;
+                }
+            }
+            return answer;
+        }
+        private string FindString(string startPattern, string endPattern, WebPage page)
+        {
+            Regex startRegex = new Regex(startPattern);
+            Regex endRegex = new Regex(endPattern);
+            string answer = "";
+            for (int i = 0; i < page.HTML.Length; i++)
+            {
+                MatchCollection matches = startRegex.Matches(page.HTML[i]);
+                if (matches.Count > 0)
+                {
+                    answer = matches[0].Groups[1].ToString();
+                    while (i < page.HTML.Length)
+                    {
+                        i++;
+                        MatchCollection endMatches = endRegex.Matches(page.HTML[i]);
+                        if (endMatches.Count > 0)
+                        {
+                            answer += endMatches[0].Groups[1].ToString();
+                            break;
+                        }
+                        else
+                        {
+                            answer += page.HTML[i];
+                        }
+                    } 
+                    break;
+                }
+            }
+            return answer;
+        }
+
+        public void Print()
+        {
+            foreach (var game in this.games)
+            {
+                Console.WriteLine(game.Name);
+                Console.WriteLine(game.Description);
+                Console.WriteLine(game.Review);
+            }
+        }
+
+        public void PrintGame(GameInfo game)
+        {
+            Console.WriteLine("NAME: " + game.Name);
+            Console.WriteLine("DESCRIPTION: " + game.Description);
+            Console.WriteLine("STARS: " + game.Review);
+            Console.WriteLine("WHAT\'S NEW: " + game.WhatsNew);
+        }
     }
 }
