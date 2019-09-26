@@ -19,3 +19,10 @@ C:\Users\Liko\source\repos\GameCatalog\GameCatalog\obj\Debug\GameCatalog.csprojA
 C:\Users\Liko\source\repos\GameCatalog\GameCatalog\obj\Debug\GameCatalog.csproj.CoreCompileInputs.cache
 C:\Users\Liko\source\repos\GameCatalog\GameCatalog\obj\Debug\GameCatalog.exe
 C:\Users\Liko\source\repos\GameCatalog\GameCatalog\obj\Debug\GameCatalog.pdb
+C:\Users\user_2\Documents\GameCatalog\GameCatalog\obj\Debug\GameCatalog.csprojAssemblyReference.cache
+C:\Users\user_2\Documents\GameCatalog\GameCatalog\obj\Debug\GameCatalog.csproj.CoreCompileInputs.cache
+C:\Users\user_2\Documents\GameCatalog\GameCatalog\obj\Debug\GameCatalog.exe
+C:\Users\user_2\Documents\GameCatalog\GameCatalog\obj\Debug\GameCatalog.pdb
+C:\Users\user_2\Documents\GameCatalog\GameCatalog\bin\Debug\GameCatalog.exe.config
+C:\Users\user_2\Documents\GameCatalog\GameCatalog\bin\Debug\GameCatalog.exe
+C:\Users\user_2\Documents\GameCatalog\GameCatalog\bin\Debug\GameCatalog.pdb
