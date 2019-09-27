@@ -10,11 +10,12 @@ namespace GameCatalog
         const string googlePlay = @"https://play.google.com";
         const string language = @"&hl=en_us";
         const string appUrlPattern = @"(\/store\/apps\/details\?id=[^""]*)";
-        const string devUrlPattern = @"(\/store\/apps\/dev\?id=[^""]*)";
+        const string devUrlPattern = @"(\/store\/apps\/dev.*?)""[^]]";
         List<string> devUrl = new List<string>();
 
         public List<WebPage> pages = new List<WebPage>();
         public List<GameInfo> games = new List<GameInfo>();
+        public List<DevInfo> devs = new List<DevInfo>();
 
 
         public Crawler()
@@ -32,14 +33,15 @@ namespace GameCatalog
             {
                 MatchCollection matches = regex.Matches(line);
                 MatchCollection devMatches = devRegex.Matches(line);
-                if (matches.Count > 0)
-                {
-                    WebPage page = new WebPage(googlePlay + matches[0].ToString() + language);
-                    // this.pages.Add(page);
-                    GameInfo game = ParseGameInfo(page);
-                    this.games.Add(game);
-                    PrintGame(game);
-                }
+
+                //if (matches.Count > 0)
+                //{
+                //    WebPage page = new WebPage(googlePlay + matches[0].ToString() + language);
+                //    // this.pages.Add(page);
+                //    GameInfo game = ParseGameInfo(page);
+                //    this.games.Add(game);
+                //    PrintGame(game);
+                //}
                 if (devMatches.Count > 0)
                 {
                     string devPageUrl = googlePlay + devMatches[0].ToString() + language;
@@ -52,10 +54,18 @@ namespace GameCatalog
             }
         }
 
+        private void CrawlDev(string url)
+        {
+            // regex for devFeatured => kahTnf".*?(\/store.*?)"
+        }
 
-        
 
 
+
+
+        // =====================================================================
+        // PARSE GAME OBJECT
+        // =====================================================================
 
         private GameInfo ParseGameInfo(WebPage page)
         {

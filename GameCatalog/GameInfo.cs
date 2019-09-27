@@ -23,4 +23,12 @@ namespace GameCatalog
 
         public GameInfo() { }
     }
+
+    public class DevInfo
+    {
+        public string DeveloperName { get; set; }
+        public List<GameInfo> GameLibrary { get; set; }
+
+        public DevInfo() { }
+    }
 }
