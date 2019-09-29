@@ -29,6 +29,9 @@ namespace GameCatalog
         public string DeveloperName { get; set; }
         public List<GameInfo> GameLibrary { get; set; }
 
-        public DevInfo() { }
+        public DevInfo()
+        {
+            this.GameLibrary = new List<GameInfo>();
+        }
     }
 }

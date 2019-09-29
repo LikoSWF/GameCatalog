@@ -15,7 +15,7 @@ namespace GameCatalog
         {
 
             Crawler crawler = new Crawler();
-            ObjectToXML<List<GameInfo>> data = new ObjectToXML<List<GameInfo>>(crawler.games);
+            ObjectToXML<List<DevInfo>> data = new ObjectToXML<List<DevInfo>>(crawler.devs);
             data.SaveData();
             Console.ReadKey();
         }
