@@ -9,11 +9,11 @@ namespace GameCatalog
         const string url = @"https://play.google.com/store/apps/collection/cluster?clp=CiMKIQobdG9wc2VsbGluZ19mcmVlX0dBTUVfQ0FTSU5PEAcYAw%3D%3D:S:ANO1ljKaOLc&gsr=CiUKIwohCht0b3BzZWxsaW5nX2ZyZWVfR0FNRV9DQVNJTk8QBxgD:S:ANO1ljLq6J8";
         const string googlePlay = @"https://play.google.com";
         const string language = @"&hl=en_us";
-        const string appUrlPattern = @"(\/store\/apps\/details\?id=[^""]*)";
+        const string appUrlPattern = @"wXUyZd.*?(\/store\/apps\/details\?id=[^""]*)";
         const string devUrlPattern = @"""(\/store\/apps\/dev.*?)"".*?><.*?>(.*?)<"; // @"(\/store\/apps\/dev.*?)""[^]]";
         const string devNamePattern = @"""\/store\/apps\/dev.*?><.*?>(.*?)<";
-        List<string> devUrl = new List<string>();
 
+        public List<string> devUrl = new List<string>();
         public List<WebPage> pages = new List<WebPage>();
         public List<GameInfo> games = new List<GameInfo>();
         public List<DevInfo> devs = new List<DevInfo>();
@@ -38,19 +38,6 @@ namespace GameCatalog
                 MatchCollection matches = regex.Matches(line);
                 MatchCollection devMatches = devRegex.Matches(line);
 
-                // Only goes through top 50 game // just use CrawlGames(); //
-
-                //if (matches.Count > 0)
-                //{
-                //    WebPage page = new WebPage(googlePlay + matches[0].ToString() + language);
-                //    // this.pages.Add(page);
-                //    GameInfo game = ParseGameInfo(page);
-                //    this.games.Add(game);
-                //    PrintGame(game);
-                //}
-
-                // Goes through devs of top 50 games and finds all games from devs //
-
                 if (devMatches.Count > 0)
                 {
                     string devPageUrl = FullURL(devMatches[0].Groups[1].ToString());
@@ -62,13 +49,6 @@ namespace GameCatalog
                     else continue;
                 }
             }
-
-            // temp print
-            foreach (var dev in devs)
-            {
-                PrintDev(dev);
-            }
-            
         }
         private List<GameInfo> CrawlGames(string url)
         {
@@ -91,25 +71,44 @@ namespace GameCatalog
         {
             const string featAppPattern = @"Featured.*?<a.*?""(.*?details.*?)""";
             const string seeMorePattern = @"""(\S*)"".See\smore";
-            const string devNamePattern = @"<h\d[^>]*?>(.*?)<"; // or use global dev pattern...
             WebPage page = new WebPage(url);
             DevInfo devInfo = new DevInfo();
+            List<string> gameUrls = new List<string>();
+            string findMore = "";
 
             Regex seeMore = new Regex(seeMorePattern);
             Regex featApp = new Regex(featAppPattern);
+
             foreach (var line in page.HTML)
             {
-                MatchCollection feature = featApp.Matches(line);
-                MatchCollection more = seeMore.Matches(line);
-                if (feature.Count > 0)
+                if (seeMore.Matches(line).Count > 0)
                 {
-                    devInfo.GameLibrary.Add(ParseGameInfo(FullURL(feature[0].Groups[1].ToString())));
-                }
-                if (more.Count > 0)
-                {
-                    devInfo.GameLibrary.InsertRange(devInfo.GameLibrary.Count, CrawlGames(FullURL(more[0].Groups[1].ToString())));
+                    findMore = FullURL(seeMore.Matches(line)[0].Groups[1].ToString());
                 }
             }
+            if (findMore == string.Empty)
+            {
+                devInfo.GameLibrary = CrawlGames(url);
+                
+            }
+            else
+            {
+                foreach (var line in page.HTML)
+                {
+                    MatchCollection feature = featApp.Matches(line);
+                    if (feature.Count > 0)
+                    {
+                        string gameUrl = FullURL(feature[0].Groups[1].ToString());
+                        gameUrls.Add(gameUrl);
+                        devInfo.GameLibrary.Add(ParseGameInfo(FullURL(feature[0].Groups[1].ToString())));
+                    }
+                }
+                devInfo.GameLibrary.InsertRange(devInfo.GameLibrary.Count, CrawlGames(findMore));
+            }
+            
+            
+
+
             devInfo.DeveloperName = FindString(Crawler.devNamePattern, page);
             return devInfo;
         }
@@ -120,12 +119,11 @@ namespace GameCatalog
 
         private GameInfo ParseGameInfo(string url)
         {
+
             WebPage page = new WebPage(url);
             GameInfo info = new GameInfo();
             const string namePattern = @"<h1[^>]*>.*<span[^>]*>([^<]*)<\/span>";
-            const string descriptionPattern = @"sngebd.*?>(.+?)<\/div>"; // use only if on single line
-            //const string descriptionStart = @"name=""description""[^>]*content=""(.*)"; // use for multiline
-            //const string descriptionEnd = @"([^>]*)"">"; // use for multiline
+            const string descriptionPattern = @"description.*?""sngebd"">(.*?)<\/div>";
             const string reviewPattern = @"BHMmbe[^>]*>([\d\.]*)<";
             const string whatsNewPattern = @"New\W.*jsslot>(.*?)<\/span>";
             const string lastUpdatePattern = @">(\w+\s\d+,\s\d+)<";
@@ -220,12 +218,22 @@ namespace GameCatalog
 
         // PRINT =================================================================
 
+        public int CountGames()
+        {
+            int count = 0;
+            foreach (var dev in devs)
+            {
+                count += dev.GameLibrary.Count;
+            }
+            return count;
+        }
+
         public void PrintDev(DevInfo dev)
         {
             Console.WriteLine("DEVELOPER: " + dev.DeveloperName);
             for (int i = 0; i < dev.GameLibrary.Count; i++)
             {
-                Console.WriteLine("GAME" + 1);
+                Console.WriteLine("GAME" + i);
                 PrintGame(dev.GameLibrary[i]);
             }
         }

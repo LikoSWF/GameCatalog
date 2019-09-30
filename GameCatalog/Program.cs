@@ -17,6 +17,12 @@ namespace GameCatalog
             Crawler crawler = new Crawler();
             ObjectToXML<List<DevInfo>> data = new ObjectToXML<List<DevInfo>>(crawler.devs);
             data.SaveData();
+            data.LoadData();
+            foreach (var dev in data.Data)
+            {
+                crawler.PrintDev(dev);
+            }
+            Console.WriteLine(crawler.CountGames());
             Console.ReadKey();
         }
     }
