@@ -15,7 +15,10 @@ namespace GameCatalog
     class ObjectToXML<T>
     {
         private string savePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\save.txt";
+
         public T Data { get; set; }
+
+        private XmlSerializer serializer = new XmlSerializer(typeof(T));
 
         public ObjectToXML(T data)
         {
@@ -24,19 +27,18 @@ namespace GameCatalog
 
         public void SaveData()
         {
-            XmlSerializer writer = new XmlSerializer(typeof(T));
             using (StreamWriter file = File.CreateText(this.savePath))
             {
-                writer.Serialize(file, this.Data);
+                this.serializer.Serialize(file, this.Data);
             }
         }
 
         public void LoadData()
         {
-            XmlSerializer reader = new XmlSerializer(typeof(T));
-            StreamReader file = new StreamReader(savePath);
-            this.Data = (T)reader.Deserialize(file);
-            file.Close();
+            using (StreamReader file = new StreamReader(this.savePath))
+            {
+                this.Data = (T)this.serializer.Deserialize(file);
+            }
         }
     }
 }

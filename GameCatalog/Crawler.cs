@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace GameCatalog
 {
     class Crawler
     {
+        // Casino Games
         const string url = @"https://play.google.com/store/apps/collection/cluster?clp=CiMKIQobdG9wc2VsbGluZ19mcmVlX0dBTUVfQ0FTSU5PEAcYAw%3D%3D:S:ANO1ljKaOLc&gsr=CiUKIwohCht0b3BzZWxsaW5nX2ZyZWVfR0FNRV9DQVNJTk8QBxgD:S:ANO1ljLq6J8";
+        // Action Games
+//        const string url = @"https://play.google.com/store/apps/collection/cluster?clp=SjAKIQobcHJvbW90aW9uX2NwX2ZpZ2h0aW5nX2dhbWVzEAcYAxILR0FNRV9BQ1RJT04%3D:S:ANO1ljJSDVs&gsr=CjJKMAohChtwcm9tb3Rpb25fY3BfZmlnaHRpbmdfZ2FtZXMQBxgDEgtHQU1FX0FDVElPTg%3D%3D:S:ANO1ljLBK90";
         const string googlePlay = @"https://play.google.com";
         const string language = @"&hl=en_us";
         const string appUrlPattern = @"wXUyZd.*?(\/store\/apps\/details\?id=[^""]*)";
