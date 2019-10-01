@@ -41,7 +41,7 @@ namespace GameCatalog
             sw2.Stop();
             
             Console.WriteLine("SW1: " + sw.Elapsed);
-            Console.WriteLine("SW2: " + sw2.Elapsed);
+            //Console.WriteLine("SW2: " + sw2.Elapsed);
         }
     }
 }
