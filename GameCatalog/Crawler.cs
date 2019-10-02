@@ -93,7 +93,6 @@ namespace GameCatalog
             if (findMore == string.Empty)
             {
                 devInfo.GameLibrary = CrawlGames(url);
-                
             }
             else
             {

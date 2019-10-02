@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crawler.cs" />
+    <Compile Include="CrawlGamePage.cs" />
+    <Compile Include="Page.cs" />
     <Compile Include="ObjectToXML.cs" />
     <Compile Include="GameInfo.cs" />
     <Compile Include="WebPage.cs" />
