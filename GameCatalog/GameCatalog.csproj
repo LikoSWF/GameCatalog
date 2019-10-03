@@ -47,10 +47,12 @@
   <ItemGroup>
     <Compile Include="Crawler.cs" />
     <Compile Include="CrawlGamePage.cs" />
+    <Compile Include="Links.cs" />
+    <Compile Include="XMLConverter.cs" />
+    <Compile Include="SructureClasses.cs" />
     <Compile Include="Page.cs" />
-    <Compile Include="ObjectToXML.cs" />
-    <Compile Include="GameInfo.cs" />
-    <Compile Include="WebPage.cs" />
+    <Compile Include="Pattern.cs" />
+    <Compile Include="Old\WebPage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

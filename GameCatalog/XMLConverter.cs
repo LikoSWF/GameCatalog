@@ -12,7 +12,7 @@ using System.IO;
 
 namespace GameCatalog
 {
-    class ObjectToXML<T>
+    class XMLConverter<T>
     {
         private string savePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\save.txt";
 
@@ -20,7 +20,7 @@ namespace GameCatalog
 
         private XmlSerializer serializer = new XmlSerializer(typeof(T));
 
-        public ObjectToXML(T data)
+        public XMLConverter(T data)
         {
             this.Data = data;
         }

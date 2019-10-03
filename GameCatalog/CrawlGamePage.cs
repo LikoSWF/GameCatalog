@@ -9,10 +9,17 @@ namespace GameCatalog
 {
     class CrawlGamePage
     {
+        public GameInfo Game { get; set; }
+
+        public CrawlGamePage(string url)
+        {
+            this.Game = ParseGameInfo(url);
+        }
+
         private GameInfo ParseGameInfo(string url)
         {
 
-            WebPage page = new WebPage(url);
+            Page page = new Page(url);
             GameInfo info = new GameInfo();
             const string namePattern = @"<h1[^>]*>.*<span[^>]*>([^<]*)<\/span>";
             const string descriptionPattern = @"description.*?""sngebd"">(.*?)<\/div>";
@@ -28,9 +35,9 @@ namespace GameCatalog
             const string inappPattern = @"In-app.*?>([^<]+)<";
 
             info.Name = FindString(namePattern, page);
-            info.Description = RemoveTags(LineBreak(FindString(descriptionPattern, page)));
+            info.Description = FindString(descriptionPattern, page);
             info.Review = FindString(reviewPattern, page);
-            info.WhatsNew = LineBreak(FindString(whatsNewPattern, page));
+            info.WhatsNew = FindString(whatsNewPattern, page);
             info.LastUpdate = FindString(lastUpdatePattern, page);
             info.Size = FindString(sizePattern, page);
             info.Installs = FindString(installsPattern, page);
@@ -42,34 +49,25 @@ namespace GameCatalog
             return info;
         }
 
-        private string FindString(string regexPattern, WebPage page)
+        private string FindString(string regexPattern, Page page)
         {
             Regex regex = new Regex(regexPattern);
             string answer = "";
-            for (int i = 0; i < page.HTML.Length; i++)
+            MatchCollection matches = regex.Matches(page.HTML);
+            for (int i = 0; i < matches.Count; i++)
             {
-                MatchCollection matches = regex.Matches(page.HTML[i]);
-                if (matches.Count > 0)
+                for (int j = 1; j < matches[0].Groups.Count; j++)
                 {
-                    for (int j = 1; j < matches[0].Groups.Count; j++)
-                    {
-                        answer += matches[0].Groups[j].ToString();
-                        answer += (j + 1 < matches[0].Groups.Count ? " " : "");
-                    }
-                    break;
+                    answer += matches[0].Groups[j].ToString();
+                    answer += (j + 1 < matches[0].Groups.Count ? " " : "");
                 }
             }
-
-            return System.Net.WebUtility.HtmlDecode(answer);
+            return Format(answer);
         }
 
-        private string LineBreak(string str)
-        {
-            return str.Replace("<br>", "\n");
-        }
-        private string RemoveTags(string str)
-        {
-            return str = Regex.Replace(str, @"<[^>]*>", "");
-        }
+        private string Format(string str) => HtmlDecode(RemoveTags(LineBreak(str)));
+        private string LineBreak(string str) => str.Replace("<br>", "\n");
+        private string RemoveTags(string str) => Regex.Replace(str, @"<[^>]*>", "");
+        private string HtmlDecode(string str) => System.Net.WebUtility.HtmlDecode(str);
     }
 }
