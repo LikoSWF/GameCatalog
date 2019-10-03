@@ -8,43 +8,19 @@ using System.Text.RegularExpressions;
 
 namespace GameCatalog
 {
-    class Links
+    class FindLinks
     {
-        public List<string> AppLinks { get; private set; }
-        public List<string> DevLinks { get; private set; }
-        public List<string> MoreLinks { get; private set; }
+        public List<string> Links { get; private set; }
 
-        public Links(string pageUrl)
+        public FindLinks(Page page, string linkTypeRegex)
         {
-            Stopwatch timer = new Stopwatch();
+            Regex findLink = new Regex(linkTypeRegex);
 
+            List<string> linkList = new List<string>();
 
-            Page page = new Page(pageUrl);
+            AddMatch(ref linkList, findLink, page.HTML);
 
-            timer.Start();
-
-            Regex findGame = new Regex(Pattern.AppUrl);
-            Regex findDev = new Regex(Pattern.DevUrl);
-            Regex findMore = new Regex(Pattern.MoreUrl);
-
-            List<string> appList = new List<string>();
-            List<string> devList = new List<string>();
-            List<string> moreList = new List<string>();
-
-            AddMatch(ref appList, findGame, page.HTML);
-            AddMatch(ref devList, findDev, page.HTML);
-            AddMatch(ref moreList, findMore, page.HTML);
-
-            this.AppLinks = appList;
-            this.DevLinks = devList;
-            this.MoreLinks = moreList;
-
-            timer.Stop();
-
-            Console.WriteLine("GET LINKS:  " + timer.Elapsed);
-            Console.WriteLine("App Count:  " + this.AppLinks.Count);
-            Console.WriteLine("Dev Count:  " + this.DevLinks.Count);
-            Console.WriteLine("More Count: " + this.MoreLinks.Count);
+            this.Links = linkList;
         }
 
         private void AddMatch(ref List<string> list, Regex regex, string line)
@@ -62,7 +38,8 @@ namespace GameCatalog
 
         private string FullURL(string url)
         {
-            return Pattern.GooglePlay + url + Pattern.Language;
+            string lang = url.IndexOf('?') >= 0 ? "&" : "?";
+            return Pattern.GooglePlay + url + lang + Pattern.Language;
         }
 
     }

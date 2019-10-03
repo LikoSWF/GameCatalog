@@ -45,9 +45,10 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Crawler.cs" />
+    <Compile Include="Old\Crawler.cs" />
     <Compile Include="CrawlGamePage.cs" />
     <Compile Include="Links.cs" />
+    <Compile Include="PlayStore.cs" />
     <Compile Include="XMLConverter.cs" />
     <Compile Include="SructureClasses.cs" />
     <Compile Include="Page.cs" />

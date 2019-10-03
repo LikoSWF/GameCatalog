@@ -140,7 +140,7 @@ namespace GameCatalog
 
             info.Name = FindString(namePattern, page);
             info.Description = RemoveTags(LineBreak(FindString(descriptionPattern, page)));
-            info.Review = FindString(reviewPattern, page);
+            info.Rating = FindString(reviewPattern, page);
             info.WhatsNew = LineBreak(FindString(whatsNewPattern, page));
             info.LastUpdate = FindString(lastUpdatePattern, page);
             info.Size = FindString(sizePattern, page);
@@ -245,7 +245,7 @@ namespace GameCatalog
         {
             Console.WriteLine("NAME: " + game.Name);
             Console.WriteLine("DESCRIPTION: " + game.Description);
-            Console.WriteLine("STARS: " + game.Review);
+            Console.WriteLine("STARS: " + game.Rating);
             Console.WriteLine("WHAT\'S NEW: " + game.WhatsNew);
             Console.WriteLine("LAST UPDATED: " + game.LastUpdate);
             Console.WriteLine("SIZE: " + game.Size);

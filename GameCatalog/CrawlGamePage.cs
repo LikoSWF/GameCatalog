@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using System.Net;
 
 namespace GameCatalog
 {
@@ -11,41 +7,31 @@ namespace GameCatalog
     {
         public GameInfo Game { get; set; }
 
-        public CrawlGamePage(string url)
+        public CrawlGamePage(Page page)
         {
-            this.Game = ParseGameInfo(url);
+            this.Game = ParseGameInfo(page);
         }
 
-        private GameInfo ParseGameInfo(string url)
+        private GameInfo ParseGameInfo(Page page)
         {
-
-            Page page = new Page(url);
             GameInfo info = new GameInfo();
-            const string namePattern = @"<h1[^>]*>.*<span[^>]*>([^<]*)<\/span>";
-            const string descriptionPattern = @"description.*?""sngebd"">(.*?)<\/div>";
-            const string reviewPattern = @"BHMmbe[^>]*>([\d\.]*)<";
-            const string whatsNewPattern = @"New\W.*jsslot>(.*?)<\/span>";
-            const string lastUpdatePattern = @">(\w+\s\d+,\s\d+)<";
-            const string sizePattern = @">Size.*?>([^<]+)<";
-            const string installsPattern = @">Installs.*?>([^<]+)<";
-            const string versionPattern = @"Version<.*?>([^<]+)<";
-            const string requiresPattern = @">Requires\s(.*?)<.*?>([^<]+)<";
-            const string ratingPattern = @"Rating<.*?>([^<]+)(?:<.*?>([^<]+))*.*?<a";
-            const string interactivePattern = @"Elements<.*?>([^<]+).*?(?:>([^<]+).*?)*?<\/div>";
-            const string inappPattern = @"In-app.*?>([^<]+)<";
 
-            info.Name = FindString(namePattern, page);
-            info.Description = FindString(descriptionPattern, page);
-            info.Review = FindString(reviewPattern, page);
-            info.WhatsNew = FindString(whatsNewPattern, page);
-            info.LastUpdate = FindString(lastUpdatePattern, page);
-            info.Size = FindString(sizePattern, page);
-            info.Installs = FindString(installsPattern, page);
-            info.Version = FindString(versionPattern, page);
-            info.Requirements = FindString(requiresPattern, page);
-            info.ContentRating = FindString(ratingPattern, page);
-            info.InteractiveElements = FindString(interactivePattern, page);
-            info.InappPurchases = FindString(inappPattern, page);
+            info.Name                = FindString(Pattern.Name, page);
+            string price = FindString(Pattern.Price, page);
+            if (price == "0") price = "Free";
+            info.Price               = price;
+            info.Developer           = FindString(Pattern.DevName, page);
+            info.Description         = FindString(Pattern.Description, page);
+            info.Rating              = FindString(Pattern.Review, page);
+            info.WhatsNew            = FindString(Pattern.WhatsNew, page);
+            info.LastUpdate          = FindString(Pattern.LastUpdate, page);
+            info.Size                = FindString(Pattern.Size, page);
+            info.Installs            = FindString(Pattern.Installs, page);
+            info.Version             = FindString(Pattern.Version, page);
+            info.Requirements        = FindString(Pattern.Requires, page);
+            info.ContentRating       = FindString(Pattern.Rating, page);
+            info.InteractiveElements = FindString(Pattern.Interactive, page);
+            info.InappPurchases      = FindString(Pattern.Inapp, page);
             return info;
         }
 
@@ -68,6 +54,6 @@ namespace GameCatalog
         private string Format(string str) => HtmlDecode(RemoveTags(LineBreak(str)));
         private string LineBreak(string str) => str.Replace("<br>", "\n");
         private string RemoveTags(string str) => Regex.Replace(str, @"<[^>]*>", "");
-        private string HtmlDecode(string str) => System.Net.WebUtility.HtmlDecode(str);
+        private string HtmlDecode(string str) => WebUtility.HtmlDecode(str);
     }
 }
